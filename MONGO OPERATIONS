@@ -160,3 +160,8 @@ db.Student.aggregate(
 		}
 	]
 )
+
+
+
+
+db.Student.aggregate([{"$unwind":"$Subject"},{"$group":{"_id":{"student_name":"$Student_Name"},"Total_Marks":{"$sum":"$Mark_Scored"}}},{"$project":{"_id":0,"student_Name1":"$_id.student_name","total":"$Total_Marks"}},{"$sort":{"total":-1}}])
