@@ -67,3 +67,18 @@ db.employee.find().sort({"address.city":1, "address.location":-1});
 
 var records = db.employee.find().sort({"address.city":1, "address.location":1});records.forEach((row)=>{ print(row)})
 
+
+
+var records = db.employee.find({});
+
+records.forEach((row)=>{
+	if(row.address && !row.address.length)
+	{
+		let add = row.address;
+		
+		row.address = [];
+		
+		row.address.push(add);
+	}
+	db.employee.save(row);
+})
