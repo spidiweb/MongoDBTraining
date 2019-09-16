@@ -59,6 +59,23 @@ $gt, $gte, $lt, $lte, $ne->not equal to , $nin-> not in, $size-> length of array
 
 
 
+db.employee.update({},{"$set":{"age":27}},{multi:true})
+
+db.employee.update({},{"$inc":{age:29}})
+
+db.employee.update({EMPD:1007},{"$unset":{age:""}},{"upsert":true,multi:true})
+
+
+db.employee.insert({name:'Mike',empd:1011, designation:'ceo', addresses:[]})
+
+db.employee.update({EMPD:1011},{"$push":{addresses:{location:'Koh-E-Fiza', city:"Bhopal"}}},{"upsert":true,multi:true})
+
+
+
+db.employee.update({EMPD:1011},{"$addToSet":{addresses:{location:'Koh-E-Fiza', city:"Bhopal"}}},{"upsert":true,multi:true})
+
+
+
 db.employee.find({"$or":[{"designation":"Developer"},{"address.city":"Pune"}]},{"empd":1, name:1, designation:1, "address.city":1})
 
 db.employee.find({"$and":[{"designation":"Developer"},{"address.city":"Pune"}]},{"empd":1, name:1, designation:1, "address.city":1})
@@ -82,3 +99,51 @@ records.forEach((row)=>{
 	}
 	db.employee.save(row);
 })
+
+
+var records = db.employee.find({});
+
+records.forEach((row)=>{
+	if(row.address && !row.address.length)
+	{
+		let add = row.address;
+		
+		row.address = [];
+		
+		row.address.push(add);
+	}
+	db.employee.save(row);
+})
+
+
+
+db.authors.insert({
+	"comments":[
+	{"author":"Ritchie", "votes":10},
+	{"author":"David", "votes":6},
+	{"author":"Ritchie", "votes":5}
+	]
+});
+
+
+db.authors.update( 
+	{"comments.author":"Ritchie"}, 
+	{"$inc":{"comments.0.votes":1}} 
+)
+
+
+
+db.fruits.insert({apple:5, orange:10});
+
+db.fruits.insert({apple:5, orange:6});
+db.fruits.insert({apple:5, orange:4});
+db.fruits.insert({apple:5, orange:5});
+db.fruits.insert({apple:2, orange:2});
+
+
+db.fruits.find({"$where":function(){ if(this.apple === this.orange) return true; else return false; }});
+
+
+db.Student.aggregate([{"$match":{Student_Name:"Kalki"}},{"$unwind":"$Subject"}])
+
+
