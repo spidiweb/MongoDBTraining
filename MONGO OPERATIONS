@@ -1,0 +1,69 @@
+mongod
+
+mongo
+
+show dbs
+
+use <DBNAME>
+
+show collections
+
+db.help()
+
+db.collectionName.findOne();--return 1 record
+
+db.collectionName.find();--Show all records
+
+db.collectionName.find({"name":"Aman"})
+
+db.collectionName.help()
+
+
+db.employee.update({"empid":1001},{"$set":{"name":"Happy",designation:"Intern"}});--updates only 1 record even if there are 2 records which satisfies the conditions.
+
+to update all the matching records:
+
+db.employee.update({"empid":1001},{"$set":{"name":"Happy",designation:"Intern"}},{multi:true});
+
+db.employee.update({"empd":1003},{"$set":{"name":"Aman","designation":"Intern"}},{"upsert":true})
+
+
+db.employee.remove({"empd":1002})
+
+db.employee.remove({"empd":1002},{"justOne":true});
+
+
+db.find({},{"designation":1})
+
+
+db.employee.insert({"empd":1005, "name":"Hello","designation":"Developer", "address":{"location":"Hinjawadi",city:"Pune"}})
+
+db.employee.insert({"empd":1006, "name":"Aman","designation":"Developer", "address":{"location":"Hebbal",city:"Bangalore"}})
+
+
+db.employee.find({empd:{$gte : 1002}})
+
+db.employee.find({empd:{$in : [1001,1002]}})
+
+db.employee.find({empd:{$in : [100,1002]}})
+
+db.employee.update({},{"$set":{"address":{"location":"Viman Nagar","city":"Pune"}}},{"upsert":true,multi:true})
+
+db.employee.find({"address.city":"Pune"});
+
+db.employee.find({},{"empd":1, "name":1, "designation":1, "address.city":1})
+
+
+$gt, $gte, $lt, $lte, $ne->not equal to , $nin-> not in, $size-> length of array.
+
+
+
+
+db.employee.find({"$or":[{"designation":"Developer"},{"address.city":"Pune"}]},{"empd":1, name:1, designation:1, "address.city":1})
+
+db.employee.find({"$and":[{"designation":"Developer"},{"address.city":"Pune"}]},{"empd":1, name:1, designation:1, "address.city":1})
+
+db.employee.find().sort({"address.city":1, "address.location":-1});
+
+var records = db.employee.find().sort({"address.city":1, "address.location":1});records.forEach((row)=>{ print(row)})
+
