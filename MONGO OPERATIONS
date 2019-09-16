@@ -147,3 +147,16 @@ db.fruits.find({"$where":function(){ if(this.apple === this.orange) return true;
 db.Student.aggregate([{"$match":{Student_Name:"Kalki"}},{"$unwind":"$Subject"}])
 
 
+
+db.Student.aggregate(
+	[
+		{"$match":{Student_Name:"Kalki"}}
+		,{"$unwind":"$Subject"}
+		,{
+			"$group":{
+				"_id":{"Student_Name":"$Student_Name"}
+				,"Total_Marks":{"$sum":"$Mark_Scored"}
+			}
+		}
+	]
+)
