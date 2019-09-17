@@ -184,3 +184,50 @@ db.Student.aggregate([{
 		}
 	}
 }])
+
+
+db.airports.createIndex({"loc":"2dsphere"})
+db.states.createIndex({"loc":"2dsphere"})
+
+var california = db.states.findOne({"code":"CA"});
+
+db.airports.find({"loc":{"$geoWithin":{"$geometry":california.loc}}},{"name":1,type:1});
+
+
+
+
+//on primary
+rs.initiate();
+rs.add("localhost:27018")
+rs.add("localhost:27019")
+rs.isMaster()
+rs.status()
+
+
+//on secondry
+rs.slaveOk()
+
+//on primary
+use replicateDb
+db.student.insert({rollno:101, name:"Arun"});
+
+
+db.createCollection("contactdetails",{
+ "validator":{
+ "$jsonSchema":{
+ "bsonType":"object",
+ "required":["phone","email"],
+ "properties":{
+ "phone":{
+         "bsonType":"string",
+          "description":"mobile number"
+ },
+ "email":{
+        "bsonType":"string",
+        "description":"official mail id"
+ }}}}})
+ 
+ 
+ db.contactdetails.insert({})
+ 
+ db.contactdetails.insert({x:1,phone:'1234567890',email:'aj59848'})
